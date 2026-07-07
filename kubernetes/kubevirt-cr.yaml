@@ -1,0 +1,22 @@
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: kubevirt
+  namespace: kubevirt
+spec:
+  # Overwrite infrastructure component affinity rules
+  infra:
+    nodePlacement:
+      # Option A: Replace master labels with a standard OS filter
+      nodeSelector:
+        kubernetes.io/os: linux
+      
+      # Option B: Explicitly overwrite affinity with an empty structure to completely strip it
+      affinity: {} 
+
+  # Overwrite runtime VM components to match workers
+  workloads:
+     nodePlacement:
+       affinity: {}        # empty = no cluster-wide affinity injected
+       tolerations: []
+       nodeSelector: {}

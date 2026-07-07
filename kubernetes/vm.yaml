@@ -1,0 +1,41 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: test-vm
+  namespace: default
+spec:
+  running: true
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: vm-secondary-net
+    spec:
+      domain:
+        cpu:
+          cores: 1
+        memory:
+          guest: 512Mi
+        devices:
+          interfaces:
+          - name: default
+            masquerade: {}
+          - name: secondary
+            bridge: {}
+          disks:
+          - name: rootdisk
+            disk:
+              bus: virtio
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: "500m"
+      networks:
+      - name: default
+        pod: {}
+      - name: secondary
+        multus:
+          networkName: vm-secondary-net
+      volumes:
+      - name: rootdisk
+        containerDisk:
+          image: quay.io/kubevirt/fedora-cloud-container-disk-demo:latest

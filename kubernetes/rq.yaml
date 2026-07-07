@@ -1,0 +1,78 @@
+# quotas.yaml
+
+# infra: CSI drivers, CNI, controllers — low count, low resource, but needs
+# to run reliably (no request throttling on critical daemons)
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: infra-quota
+  namespace: infra
+spec:
+  hard:
+    requests.cpu: "8"
+    requests.memory: 16Gi
+    limits.cpu: "16"
+    limits.memory: 32Gi
+    pods: "60"
+---
+# vms: KubeVirt VMs — heaviest per-unit resource footprint, fewer pods
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: vms-quota
+  namespace: vms
+spec:
+  hard:
+    requests.cpu: "64"
+    requests.memory: 256Gi
+    limits.cpu: "64"
+    limits.memory: 256Gi
+    pods: "50"
+    persistentvolumeclaims: "50"
+    requests.storage: 2Ti
+---
+# monitoring: Prometheus/Grafana/Loki stack — memory-heavy (Prometheus TSDB)
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: monitoring-quota
+  namespace: monitoring
+spec:
+  hard:
+    requests.cpu: "16"
+    requests.memory: 64Gi
+    limits.cpu: "32"
+    limits.memory: 96Gi
+    pods: "40"
+    persistentvolumeclaims: "20"
+    requests.storage: 500Gi
+---
+# gitops: ArgoCD/Flux controllers — low resource, low pod count
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: gitops-quota
+  namespace: gitops
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+    pods: "20"
+---
+# apps: general workloads — highest headroom, most elastic
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: apps-quota
+  namespace: apps
+spec:
+  hard:
+    requests.cpu: "100"
+    requests.memory: 200Gi
+    limits.cpu: "150"
+    limits.memory: 300Gi
+    pods: "200"
+    persistentvolumeclaims: "50"
+    requests.storage: 1Ti

@@ -1,0 +1,35 @@
+# namespaces.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infra
+  labels:
+    purpose: platform-infra
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vms
+  labels:
+    purpose: kubevirt-vms
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+  labels:
+    purpose: observability
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitops
+  labels:
+    purpose: cd-controllers
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps
+  labels:
+    purpose: workloads
